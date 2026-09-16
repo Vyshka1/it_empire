@@ -676,9 +676,15 @@ def cmd_status(args) -> int:
 
     head(f"EMPIRE OS · {today()} · {week}")
 
-    if vision["horizons"]["1y"]["target"] is None:
+    target = vision["horizons"]["1y"]["target"]
+    if target is None:
         print("  ⚠ Vision не заполнен. Портфель без цели — это набор "
               "пет-проектов.\n    Первая сессия: rituals/vision-session.md")
+    else:
+        hours = vision["constraints"].get("hours_per_week")
+        print(f"  Цель года: {target}")
+        if hours:
+            print(f"  Ёмкость: {hours} ч/нед")
 
     cmd_week(argparse.Namespace(week=week))
     cmd_portfolio(argparse.Namespace(project=None))
