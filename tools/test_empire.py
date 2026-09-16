@@ -26,6 +26,13 @@ class EmpireTest(unittest.TestCase):
     def run_cli(self, *argv):
         return empire.main(list(argv))
 
+    def state(self, name):
+        return json.loads((empire.STATE / f"{name}.json").read_text("utf-8"))
+
+    def last_commitment(self):
+        """Последнее добавленное обязательство: id зависит от живого состояния."""
+        return self.state("commitments")["commitments"][-1]
+
     # --- решения ---
 
     def test_new_idea_hits_existing_decision(self):
@@ -40,16 +47,18 @@ class EmpireTest(unittest.TestCase):
 
     def test_superseded_decision_stops_blocking(self):
         """Сознательная смена решения снимает блок; забывание — нет."""
+        before = len(empire.active_decisions(self.state("decisions")))
         self.run_cli("decision-supersede", "D-001",
                      "--what", "Разрешаем новые функции Meal Planner",
                      "--reason", "Унификация расчётов закончена")
-        d = json.loads((empire.STATE / "decisions.json").read_text("utf-8"))
+        d = self.state("decisions")
         old = next(x for x in d["decisions"] if x["id"] == "D-001")
         self.assertEqual(old["status"], "superseded")
-        self.assertEqual(old["superseded_by"], "D-004")
-        new = next(x for x in d["decisions"] if x["id"] == "D-004")
+        new = next(x for x in d["decisions"] if x["id"] == old["superseded_by"])
         self.assertEqual(new["supersedes"], "D-001")
-        self.assertEqual(len(empire.active_decisions(d)), 3)
+        self.assertEqual(new["status"], "active")
+        # одно ушло, одно пришло: число действующих решений не меняется
+        self.assertEqual(len(empire.active_decisions(d)), before)
 
     def test_closing_decision_requires_reason(self):
         self.run_cli("decision-close", "D-002", "--reason", "Discovery завершён")
@@ -61,29 +70,33 @@ class EmpireTest(unittest.TestCase):
     # --- обязательства и избегание ---
 
     def test_untouched_commitment_surfaces_as_avoidance(self):
+        before = len(empire.stuck_items())
         self.run_cli("commit-add", "--project", "price-base",
                      "--what", "Написать пяти знакомым про базу цен")
-        c = json.loads((empire.STATE / "commitments.json").read_text("utf-8"))
-        c["commitments"][0]["created"] = "2026-09-10"
+        c = self.state("commitments")
+        c["commitments"][-1]["created"] = "2026-09-10"
         (empire.STATE / "commitments.json").write_text(
             json.dumps(c, ensure_ascii=False), encoding="utf-8")
         stuck = empire.stuck_items()
-        self.assertEqual(len(stuck), 1)
+        self.assertEqual(len(stuck), before + 1)
         self.assertGreaterEqual(stuck[0][1], empire.AVOIDANCE_DAYS)
 
     def test_touch_clears_avoidance(self):
         self.run_cli("commit-add", "--project", "meal-planner",
                      "--what", "Дать продукт первому человеку")
-        self.run_cli("commit-touch", "C-001")
-        self.assertEqual(empire.stuck_items(), [])
+        cid = self.last_commitment()["id"]
+        self.run_cli("commit-touch", cid)
+        self.assertNotIn(cid, [x["id"] for x, _ in empire.stuck_items()])
 
     def test_dropped_commitment_keeps_its_reason(self):
         self.run_cli("commit-add", "--project", "signal-system", "--what", "X")
-        self.run_cli("commit-drop", "C-001", "--reason", "Заморожено D-002")
-        c = json.loads((empire.STATE / "commitments.json").read_text("utf-8"))
-        self.assertEqual(c["commitments"][0]["status"], "dropped")
-        self.assertEqual(c["commitments"][0]["drop_reason"], "Заморожено D-002")
-        self.assertEqual(empire.open_commitments(c), [])
+        cid = self.last_commitment()["id"]
+        self.run_cli("commit-drop", cid, "--reason", "Заморожено D-002")
+        dropped = self.last_commitment()
+        self.assertEqual(dropped["status"], "dropped")
+        self.assertEqual(dropped["drop_reason"], "Заморожено D-002")
+        self.assertNotIn(cid, [x["id"] for x in
+                               empire.open_commitments(self.state("commitments"))])
 
     # --- неделя ---
 
@@ -142,6 +155,24 @@ class EmpireTest(unittest.TestCase):
         pf = json.loads((empire.STATE / "portfolio.json").read_text("utf-8"))
         self.assertEqual(ideas["ideas"][0]["verdict"], "backlog")
         self.assertEqual(len(pf["projects"]), 3)
+
+    # --- личные проекты ---
+
+    def test_personal_project_is_out_of_commercial_portfolio(self):
+        """С личного инструмента империя не требует пользователей и денег."""
+        pf = json.loads((empire.STATE / "portfolio.json").read_text("utf-8"))
+        personal = [p for p in pf["projects"] if p["stage"] == "personal"]
+        self.assertTrue(personal, "Meal Planner должен быть личным (D-008)")
+        ids = {p["id"] for p in empire.commercial_projects(pf)}
+        for p in personal:
+            self.assertNotIn(p["id"], ids)
+
+    def test_personal_project_has_no_monetization_demand(self):
+        pf = json.loads((empire.STATE / "portfolio.json").read_text("utf-8"))
+        for p in pf["projects"]:
+            if p["stage"] == "personal":
+                self.assertIsNotNone(p["monetization"])
+                self.assertNotIn("TBD", p["monetization"])
 
     # --- целостность состояния ---
 

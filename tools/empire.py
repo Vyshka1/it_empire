@@ -92,6 +92,19 @@ def find_project(portfolio: dict, pid: str) -> dict | None:
     return None
 
 
+PERSONAL_STAGES = ("personal", "killed")
+
+
+def commercial_projects(portfolio: dict) -> list[dict]:
+    """Проекты, с которых империя вправе требовать пользователей и денег.
+
+    Личный инструмент не участвует в оценке портфеля: у него нет
+    монетизации и не должно быть чувства вины за отсутствие пользователей.
+    """
+    return [p for p in portfolio["projects"]
+            if p["stage"] not in PERSONAL_STAGES]
+
+
 def cmd_portfolio(args) -> int:
     pf = load("portfolio")
     if args.project:
@@ -104,11 +117,14 @@ def cmd_portfolio(args) -> int:
     head("ПОРТФЕЛЬ")
     for p in pf["projects"]:
         contact = days_since(p.get("last_user_contact"))
-        contact_s = (
-            "пользователей не видел никогда"
-            if contact is None
-            else f"последний контакт с пользователем {contact} дн. назад"
-        )
+        if p["stage"] == "personal":
+            contact_s = "личный инструмент — вне коммерческого портфеля"
+        else:
+            contact_s = (
+                "пользователей не видел никогда"
+                if contact is None
+                else f"последний контакт с пользователем {contact} дн. назад"
+            )
         print(f"  {p['name']:<28} {p['stage']:<22} {contact_s}")
         if p.get("blockers"):
             for b in p["blockers"]:
@@ -667,10 +683,11 @@ def cmd_status(args) -> int:
     cmd_week(argparse.Namespace(week=week))
     cmd_portfolio(argparse.Namespace(project=None))
 
-    live = [p for p in pf["projects"] if p.get("users_using", 0) > 0]
-    if not live:
-        print("\n  ⚠ Ни одним продуктом портфеля никто не пользуется. "
-              "Активов пока ноль.")
+    commercial = commercial_projects(pf)
+    live = [p for p in commercial if p.get("users_using", 0) > 0]
+    if commercial and not live:
+        print("\n  ⚠ Ни одним коммерческим продуктом портфеля никто "
+              "не пользуется. Активов пока ноль.")
 
     op = open_commitments(c)
     head(f"ОБЯЗАТЕЛЬСТВА: {len(op)} открыто")
