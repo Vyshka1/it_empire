@@ -42,7 +42,7 @@
   "economics": {
     "target_income_monthly": 200000,
     "time_to_first_revenue": null,
-    "acceptable_involvement": null,
+    "acceptable_involvement": "Цель — пассивный доход: проект приносит 200 000 ₽/мес без пропорциональных затрат её часов (уточняется, конфликтует с D-004)",
     "involvement_question": "Ты хочешь работать в продукте 40 часов в неделю или построить так, чтобы он работал без тебя?",
     "currency": "RUB",
     "source": "Vision-сессия 16.09.2026: «хотя бы 200 000 рублей в месяц минимум»",
@@ -50,7 +50,7 @@
     "source_of_income": "не ограничен: продукты, заказы, консалтинг"
   },
   "constraints": {
-    "hours_per_week": null,
+    "hours_per_week": 40,
     "money_available": null,
     "hard_deadlines": [],
     "non_negotiables": []
