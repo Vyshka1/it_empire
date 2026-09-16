@@ -1,0 +1,34 @@
+{
+  "_comment": "Уровень III — CEO OPERATING SYSTEM. Ровно три результата недели. Не 25 todo. Список `not_doing` так же обязателен, как список результатов: опасность не в отсутствии идей, а в их количестве.",
+  "weeks": [
+    {
+      "week": "2026-W38",
+      "outcomes": [
+        {
+          "n": 1,
+          "project": "meal-planner",
+          "result": "Закончить архитектурную стабилизацию WeekPlan",
+          "done": false
+        },
+        {
+          "n": 2,
+          "project": "price-base",
+          "result": "Провести discovery и определить MVP",
+          "done": false
+        },
+        {
+          "n": 3,
+          "project": "founder",
+          "result": "Разобраться с deployment настолько, чтобы самостоятельно контролировать выкладку",
+          "done": false
+        }
+      ],
+      "not_doing": [
+        "Новый дизайн Meal Planner",
+        "Новые рецепты",
+        "Signal — до окончания discovery по Price Base"
+      ],
+      "review": null
+    }
+  ]
+}

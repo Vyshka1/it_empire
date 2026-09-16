@@ -1,0 +1,87 @@
+{
+  "_comment": "Уровень II — PORTFOLIO. Всё, что известно из разговоров с основателем, записано. Всё, что НЕ известно, оставлено null — это не пробелы в данных, а вопросы, на которые ещё нет ответа. Coach обязан отличать одно от другого и не выдумывать факты о проектах.",
+  "stages": [
+    "idea",
+    "discovery",
+    "mvp",
+    "product-development",
+    "first-users",
+    "traction",
+    "asset",
+    "business",
+    "paused",
+    "killed"
+  ],
+  "projects": [
+    {
+      "id": "meal-planner",
+      "name": "Meal Planner",
+      "stage": "product-development",
+      "problem": "Планирование питания и оптимизация готовки",
+      "user": null,
+      "potential": null,
+      "current_milestone": "Стабилизировать domain model (WeekPlan)",
+      "next_milestone": "Usable MVP, который можно дать живому человеку",
+      "monetization": null,
+      "users_talked_to": 0,
+      "users_using": 0,
+      "last_user_contact": null,
+      "blockers": [],
+      "strategic_questions": [
+        "Для кого продукт? Опиши одного конкретного человека, а не сегмент.",
+        "Чем он лучше Ufff и других планировщиков?",
+        "Как получить первых пользователей?",
+        "Что именно является MVP — какой минимум делает продукт полезным?",
+        "Что мы сейчас делаем лишнего?"
+      ],
+      "risk": "Самый длинный проект в портфеле и при этом ноль контактов с пользователями. Риск построить технически красивую вещь, которая никому не нужна.",
+      "created": "2026-09-16"
+    },
+    {
+      "id": "price-base",
+      "name": "Корпоративная база цен",
+      "stage": "idea",
+      "problem": null,
+      "problem_hypothesis": "Организации не имеют единого актуального источника цен; сбор и сверка делаются вручную",
+      "user": null,
+      "potential": null,
+      "current_milestone": "Discovery: сформулировать проблему и её носителя",
+      "next_milestone": "Определить MVP",
+      "monetization": null,
+      "users_talked_to": 0,
+      "users_using": 0,
+      "last_user_contact": null,
+      "blockers": ["Не проведён discovery — неизвестно, чья это боль и насколько она дорогая"],
+      "strategic_questions": [
+        "Чья это боль: твоя, знакомой компании или гипотетическая?",
+        "Есть ли доступ к реальному заказчику, с которым можно поговорить на этой неделе?",
+        "B2B-продукт с длинным циклом продажи — ты готова к продажам, а не только к разработке?",
+        "Это продукт или разовый проект на заказ?"
+      ],
+      "risk": "Из всего портфеля это единственный кандидат в B2B с быстрыми деньгами — и единственный, где разработка ещё не началась. Это преимущество: discovery можно сделать до того, как написан первый файл.",
+      "created": "2026-09-16"
+    },
+    {
+      "id": "signal-system",
+      "name": "Система для Signal",
+      "stage": "idea",
+      "problem": null,
+      "problem_hypothesis": null,
+      "user": null,
+      "potential": null,
+      "current_milestone": null,
+      "next_milestone": "Не начинать до завершения discovery по Price Base",
+      "monetization": null,
+      "users_talked_to": 0,
+      "users_using": 0,
+      "last_user_contact": null,
+      "blockers": ["Сознательно заморожен решением D-002"],
+      "strategic_questions": [
+        "Что именно за система и какую задачу она решает?",
+        "Это продукт, фича существующего продукта или инструмент для себя?"
+      ],
+      "risk": "Третий параллельный фронт при незакрытых первых двух.",
+      "created": "2026-09-16"
+    }
+  ]
+}
