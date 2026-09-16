@@ -8,7 +8,12 @@
       "decision": "Не добавлять новые функции в Meal Planner до завершения унификации расчётов",
       "reason": "Архитектурный долг создаёт каскадные ошибки: каждая новая функция умножает количество мест, которые придётся переписывать",
       "revisit_after": "Унификация расчётов завершена",
-      "tags": ["scope", "features", "meal-planner", "architecture"],
+      "tags": [
+        "scope",
+        "features",
+        "meal-planner",
+        "architecture"
+      ],
       "status": "active",
       "superseded_by": null,
       "source": "Разговор с основателем 16.09.2026 — подтвердить формулировку на первом CEO Review"
@@ -20,7 +25,12 @@
       "decision": "Не начинать работу над системой для Signal до завершения discovery по Price Base",
       "reason": "Три параллельных фронта при нулевом количестве живых пользователей у любого из них. Ограничение фронтов важнее скорости",
       "revisit_after": "Discovery по Price Base завершён и MVP определён",
-      "tags": ["scope", "portfolio", "signal-system", "focus"],
+      "tags": [
+        "scope",
+        "portfolio",
+        "signal-system",
+        "focus"
+      ],
       "status": "active",
       "superseded_by": null,
       "source": "Разговор с основателем 16.09.2026"
@@ -32,10 +42,30 @@
       "decision": "KPI коуча — прогресс основателя как создателя продуктов, а не объём её знаний. Обучение включается только там, где незнание стало bottleneck",
       "reason": "Иначе Empire OS вырождается в курс по программированию, а портфель не двигается",
       "revisit_after": null,
-      "tags": ["meta", "principles", "learning"],
+      "tags": [
+        "meta",
+        "principles",
+        "learning"
+      ],
       "status": "active",
       "superseded_by": null,
       "source": "Концепция Empire OS, 16.09.2026"
+    },
+    {
+      "id": "D-004",
+      "date": "2026-09-16",
+      "project": null,
+      "decision": "Цель: 200 000 ₽/мес. Источник дохода не ограничен продуктами — заказная разработка и консалтинг допустимы как путь к сумме",
+      "reason": "Выбор основателя на Vision-сессии 16.09.2026: деньги важнее формы. Осознанно принято, что заказ не создаёт актив",
+      "revisit_after": "Сумма 200k/мес достигнута — пересмотреть, чем именно она обеспечена и что за это время построено",
+      "tags": [
+        "vision",
+        "money",
+        "portfolio"
+      ],
+      "status": "active",
+      "superseded_by": null,
+      "source": "Vision-сессия, блок 1"
     }
   ]
 }
