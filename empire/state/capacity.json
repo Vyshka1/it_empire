@@ -6,8 +6,7 @@
     {
       "week": "2026-W38",
       "planned": {
-        "meal-planner": 50,
-        "price-base": 25,
+        "price-base": 75,
         "founder-skills": 15,
         "exploration": 10
       },
