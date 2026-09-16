@@ -14,6 +14,7 @@ import argparse
 import datetime as dt
 import json
 import re
+import signal
 import sys
 from pathlib import Path
 
@@ -869,4 +870,6 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
+    # `empire status | head` не должен заканчиваться трейсбеком
+    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
     sys.exit(main())
