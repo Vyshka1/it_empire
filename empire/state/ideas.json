@@ -1,5 +1,14 @@
 {
   "_comment": "Приёмник идей. Идея не попадает в портфель напрямую — только через intake (rituals/new-idea-intake.md). Пока на вопросы intake нет ответов, идея лежит здесь и не отнимает ни одного часа.",
-  "next_id": 1,
-  "ideas": []
+  "next_id": 2,
+  "ideas": [
+    {
+      "id": "I-001",
+      "date": "2026-09-16",
+      "what": "Плагин Productivity (Anthropic): подключить Gmail + Google Calendar, когда по Price Base появятся живые заказчики — письма и встречи. Skills memory/task-management НЕ брать: конфликтуют с commitments.json",
+      "relation": null,
+      "cost": null,
+      "verdict": "backlog"
+    }
+  ]
 }
