@@ -415,6 +415,10 @@ def cmd_decision_supersede(args) -> int:
     if not old:
         print(f"Нет решения {args.id}", file=sys.stderr)
         return 1
+    if old["status"] != "active":
+        print(f"{old['id']} уже {old['status']} — заменять нечего. "
+              f"Записывай новое решение: decision-add", file=sys.stderr)
+        return 1
     n = len(d["decisions"]) + 1
     new_id = f"D-{n:03d}"
     d["decisions"].append({

@@ -47,18 +47,33 @@ class EmpireTest(unittest.TestCase):
 
     def test_superseded_decision_stops_blocking(self):
         """Сознательная смена решения снимает блок; забывание — нет."""
-        before = len(empire.active_decisions(self.state("decisions")))
-        self.run_cli("decision-supersede", "D-001",
-                     "--what", "Разрешаем новые функции Meal Planner",
-                     "--reason", "Унификация расчётов закончена")
+        active = empire.active_decisions(self.state("decisions"))
+        before = len(active)
+        target = active[0]["id"]
+        self.run_cli("decision-supersede", target,
+                     "--what", "Новая формулировка",
+                     "--reason", "Условие прежнего решения отпало")
         d = self.state("decisions")
-        old = next(x for x in d["decisions"] if x["id"] == "D-001")
+        old = next(x for x in d["decisions"] if x["id"] == target)
         self.assertEqual(old["status"], "superseded")
         new = next(x for x in d["decisions"] if x["id"] == old["superseded_by"])
-        self.assertEqual(new["supersedes"], "D-001")
+        self.assertEqual(new["supersedes"], target)
         self.assertEqual(new["status"], "active")
         # одно ушло, одно пришло: число действующих решений не меняется
         self.assertEqual(len(empire.active_decisions(d)), before)
+
+    def test_closed_decision_cannot_be_superseded(self):
+        """История решения не переписывается: закрытое не заменяют, а дополняют."""
+        active = empire.active_decisions(self.state("decisions"))[0]["id"]
+        self.run_cli("decision-close", active, "--reason", "условие выполнено")
+        before = len(self.state("decisions")["decisions"])
+        code = self.run_cli("decision-supersede", active,
+                            "--what", "Попытка переписать", "--reason", "нет")
+        self.assertEqual(code, 1)
+        after = self.state("decisions")
+        self.assertEqual(len(after["decisions"]), before)
+        closed = next(x for x in after["decisions"] if x["id"] == active)
+        self.assertEqual(closed["status"], "closed")
 
     def test_closing_decision_requires_reason(self):
         self.run_cli("decision-close", "D-002", "--reason", "Discovery завершён")
