@@ -1,14 +1,15 @@
 {
   "_comment": "Уровень V — CAPITAL ALLOCATION. Капитал здесь — часы основателя, и он невозобновляем. `planned` — договорённость, `actual` — что произошло на самом деле. Расхождение больше 15 п.п. по любой строке разбирается на CEO Review.",
-  "hours_per_week": 40,
+  "hours_per_week": 20,
   "current_week": "2026-W38",
   "allocations": [
     {
       "week": "2026-W38",
       "planned": {
-        "price-base": 75,
+        "price-base": 30,
+        "orders": 40,
         "founder-skills": 15,
-        "exploration": 10
+        "exploration": 15
       },
       "actual": {}
     }
