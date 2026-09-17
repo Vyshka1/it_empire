@@ -174,6 +174,45 @@ class EmpireTest(unittest.TestCase):
                 self.assertIsNotNone(p["monetization"])
                 self.assertNotIn("TBD", p["monetization"])
 
+    # --- контакты и воронка discovery ---
+
+    def test_contact_counts_only_real_conversations(self):
+        """Имя в списке — не разговор. Засчитывается talked и выше."""
+        self.run_cli("contact-add", "Тест", "--company", "Рога")
+        c = self.state("contacts")
+        before = empire.talked_count(c)["talked"]
+        cid = c["contacts"][-1]["id"]
+        self.run_cli("contact-set", cid, "--status", "contacted")
+        self.assertEqual(empire.talked_count(self.state("contacts"))["talked"],
+                         before)
+        self.run_cli("contact-set", cid, "--status", "talked")
+        self.assertEqual(empire.talked_count(self.state("contacts"))["talked"],
+                         before + 1)
+
+    def test_pain_and_paying_are_nested(self):
+        """Готовый платить — это и разговор, и подтверждённая боль."""
+        self.run_cli("contact-add", "Плательщик")
+        cid = self.state("contacts")["contacts"][-1]["id"]
+        self.run_cli("contact-set", cid, "--status", "paying")
+        c = self.state("contacts")
+        p = empire.talked_count(c)
+        self.assertGreaterEqual(p["talked"], 1)
+        self.assertGreaterEqual(p["pain"], 1)
+        self.assertGreaterEqual(p["paying"], 1)
+
+    def test_dead_contact_is_not_a_conversation(self):
+        self.run_cli("contact-add", "Мимо")
+        cid = self.state("contacts")["contacts"][-1]["id"]
+        before = empire.talked_count(self.state("contacts"))["talked"]
+        self.run_cli("contact-set", cid, "--status", "dead")
+        self.assertEqual(empire.talked_count(self.state("contacts"))["talked"],
+                         before)
+
+    def test_contact_statuses_are_valid(self):
+        c = self.state("contacts")
+        for x in c["contacts"]:
+            self.assertIn(x["status"], c["statuses"])
+
     # --- целостность состояния ---
 
     def test_portfolio_stages_are_valid(self):

@@ -604,6 +604,81 @@ def cmd_skill_set(args) -> int:
     return 0
 
 
+# --- контакты ---
+
+CONTACT_FLOW = ["lead", "contacted", "talked", "pain", "paying", "dead"]
+
+
+def talked_count(c: dict) -> dict:
+    """Прогресс по C-001: разговоры, подтверждённые боли, готовые платить."""
+    done = [x for x in c["contacts"] if x["status"] in ("talked", "pain", "paying")]
+    return {
+        "talked": len(done),
+        "pain": len([x for x in c["contacts"] if x["status"] in ("pain", "paying")]),
+        "paying": len([x for x in c["contacts"] if x["status"] == "paying"]),
+    }
+
+
+def cmd_contact_add(args) -> int:
+    c = load("contacts")
+    cid = f"K-{c['next_id']:03d}"
+    c["next_id"] += 1
+    c["contacts"].append({
+        "id": cid,
+        "name": args.name,
+        "company": args.company,
+        "topic": args.topic,
+        "status": args.status or "lead",
+        "warm": bool(args.warm),
+        "note": args.note,
+        "added": today(),
+        "last_touch": None,
+    })
+    save("contacts", c)
+    print(f"{cid}: {args.name}"
+          f"{f' ({args.company})' if args.company else ''} — {args.status or 'lead'}")
+    return 0
+
+
+def cmd_contacts(args) -> int:
+    c = load("contacts")
+    if not c["contacts"]:
+        print("Контактов нет. Восемь разговоров не начнутся сами.")
+        return 0
+    head("КОНТАКТЫ")
+    order = {s: i for i, s in enumerate(CONTACT_FLOW)}
+    for x in sorted(c["contacts"], key=lambda k: -order.get(k["status"], 0)):
+        warm = "тёплый" if x.get("warm") else "холодный"
+        print(f"  {x['id']} {x['name']:<12} {(x['company'] or '—'):<16} "
+              f"{x['status']:<10} {warm}")
+        if x.get("topic"):
+            print(f"       тема: {x['topic']}")
+        if x.get("note"):
+            print(f"       {x['note']}")
+    p = talked_count(c)
+    print(f"\n  C-001: разговоров {p['talked']}/8 · "
+          f"подтверждённых болей {p['pain']}/3 · готовых платить {p['paying']}/1")
+    return 0
+
+
+def cmd_contact_set(args) -> int:
+    c = load("contacts")
+    x = next((k for k in c["contacts"] if k["id"] == args.id.upper()), None)
+    if not x:
+        print(f"Нет контакта {args.id}", file=sys.stderr)
+        return 1
+    if args.status:
+        x["status"] = args.status
+        x["last_touch"] = today()
+    if args.note:
+        x["note"] = args.note
+    save("contacts", c)
+    p = talked_count(c)
+    print(f"{x['id']} → {x['status']}. "
+          f"Разговоров {p['talked']}/8, болей {p['pain']}/3, платящих {p['paying']}/1")
+    return 0
+
+
 # --- идеи --------------------------------------------------------------------
 
 def cmd_idea_add(args) -> int:
@@ -707,6 +782,14 @@ def cmd_status(args) -> int:
     if st:
         print(f"\n  ⚠ Избегание: {len(st)} обязательств стоят "
               f"{AVOIDANCE_DAYS}+ дн. → empire stuck")
+
+    try:
+        p = talked_count(load("contacts"))
+        head("DISCOVERY")
+        print(f"  Разговоров {p['talked']}/8 · болей {p['pain']}/3 · "
+              f"платящих {p['paying']}/1   (C-001, до 31.10)")
+    except FileNotFoundError:
+        pass
 
     bs = bottlenecks(sk)
     head("BOTTLENECKS")
@@ -847,6 +930,24 @@ def build_parser() -> argparse.ArgumentParser:
     ss.add_argument("--bottleneck", choices=["yes", "no"])
     ss.add_argument("--evidence")
     ss.set_defaults(func=cmd_skill_set)
+
+    ka = sub.add_parser("contact-add", help="записать человека, а не компанию")
+    ka.add_argument("name")
+    ka.add_argument("--company")
+    ka.add_argument("--topic")
+    ka.add_argument("--status", choices=CONTACT_FLOW)
+    ka.add_argument("--warm", action="store_true")
+    ka.add_argument("--note")
+    ka.set_defaults(func=cmd_contact_add)
+
+    sub.add_parser("contacts", help="воронка discovery").set_defaults(
+        func=cmd_contacts)
+
+    ks = sub.add_parser("contact-set")
+    ks.add_argument("id")
+    ks.add_argument("--status", choices=CONTACT_FLOW)
+    ks.add_argument("--note")
+    ks.set_defaults(func=cmd_contact_set)
 
     ia = sub.add_parser("idea-add", help="положить идею в бэклог")
     ia.add_argument("what")
