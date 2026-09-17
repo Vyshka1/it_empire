@@ -11,43 +11,159 @@
   "bottleneck_rule": "Одновременно активным может быть не более двух bottleneck. Третий — признак того, что мы учимся вместо того, чтобы строить.",
   "areas": {
     "PRODUCT": {
-      "product-discovery": {"level": null, "bottleneck": true, "evidence": "Три проекта в портфеле, ноль разговоров с пользователями по любому из них"},
-      "ux": {"level": null, "bottleneck": false, "evidence": null},
-      "customer-research": {"level": null, "bottleneck": true, "evidence": "Price Base стоит на discovery, а провести его некому, кроме основателя"},
-      "prioritization": {"level": null, "bottleneck": false, "evidence": "Кандидат в bottleneck: проверить на кейсе — отличает ли основатель технически интересную функцию от коммерчески важной"},
-      "metrics": {"level": null, "bottleneck": false, "evidence": null},
-      "monetization": {"level": null, "bottleneck": false, "evidence": "Ни у одного проекта в портфеле не заполнено поле monetization"}
+      "product-discovery": {
+        "level": null,
+        "bottleneck": true,
+        "evidence": "Три проекта в портфеле, ноль разговоров с пользователями по любому из них"
+      },
+      "ux": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "customer-research": {
+        "level": null,
+        "bottleneck": true,
+        "evidence": "Основатель назвала причину прямо 17.09.2026: стесняется идти к людям без готового продукта, считает, что разговор без продукта ничего им не даст. Это ложное убеждение, а не лень — лечится материалом и первым успешным разговором, а не давлением"
+      },
+      "prioritization": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": "Кандидат в bottleneck: проверить на кейсе — отличает ли основатель технически интересную функцию от коммерчески важной"
+      },
+      "metrics": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "monetization": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": "Ни у одного проекта в портфеле не заполнено поле monetization"
+      }
     },
     "TECH": {
-      "system-architecture": {"level": null, "bottleneck": false, "evidence": null},
-      "frontend": {"level": null, "bottleneck": false, "evidence": null},
-      "backend": {"level": null, "bottleneck": false, "evidence": null},
-      "databases": {"level": null, "bottleneck": false, "evidence": null},
-      "infrastructure": {"level": null, "bottleneck": false, "evidence": "Deployment вынесен в результат недели W38 — станет bottleneck, если пользователи появятся раньше, чем контроль над выкладкой"},
-      "security": {"level": null, "bottleneck": false, "evidence": null},
-      "testing": {"level": null, "bottleneck": false, "evidence": null}
+      "system-architecture": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "frontend": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "backend": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "databases": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "infrastructure": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": "Deployment вынесен в результат недели W38 — станет bottleneck, если пользователи появятся раньше, чем контроль над выкладкой"
+      },
+      "security": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "testing": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      }
     },
     "AI": {
-      "agent-orchestration": {"level": null, "bottleneck": false, "evidence": null},
-      "specification": {"level": null, "bottleneck": false, "evidence": null},
-      "code-review": {"level": null, "bottleneck": false, "evidence": null},
-      "context-engineering": {"level": null, "bottleneck": false, "evidence": null},
-      "automation": {"level": null, "bottleneck": false, "evidence": null}
+      "agent-orchestration": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "specification": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "code-review": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "context-engineering": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "automation": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      }
     },
     "BUSINESS": {
-      "market-research": {"level": null, "bottleneck": false, "evidence": null},
-      "unit-economics": {"level": null, "bottleneck": false, "evidence": null},
-      "pricing": {"level": null, "bottleneck": false, "evidence": null},
-      "sales": {"level": null, "bottleneck": false, "evidence": null},
-      "b2b": {"level": null, "bottleneck": false, "evidence": "Станет bottleneck сразу, если Price Base пройдёт discovery"},
-      "negotiations": {"level": null, "bottleneck": false, "evidence": null}
+      "market-research": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "unit-economics": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "pricing": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "sales": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "b2b": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": "Станет bottleneck сразу, если Price Base пройдёт discovery"
+      },
+      "negotiations": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      }
     },
     "MANAGEMENT": {
-      "delegation": {"level": null, "bottleneck": false, "evidence": null},
-      "planning": {"level": null, "bottleneck": false, "evidence": null},
-      "hiring": {"level": null, "bottleneck": false, "evidence": null},
-      "decision-making": {"level": null, "bottleneck": false, "evidence": null},
-      "execution": {"level": null, "bottleneck": false, "evidence": null}
+      "delegation": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "planning": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "hiring": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "decision-making": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      },
+      "execution": {
+        "level": null,
+        "bottleneck": false,
+        "evidence": null
+      }
     }
   },
   "assessments": []
